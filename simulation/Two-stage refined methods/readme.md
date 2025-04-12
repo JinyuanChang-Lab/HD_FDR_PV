@@ -1,7 +1,7 @@
 
 ## To get the results in the paper:
 
-* This section provides results of figure 3 in Section 5, figure S8 and figure S9 in the Supplementary Material.
+* This section provides results of figure 3 in Section 4, figure S8 and figure S9 in the Supplementary Material.
 
 * Run S4_origin.R to get the results of Method 1 and Method 2 in our paper with FDR level 0.05 and 0.1.
 

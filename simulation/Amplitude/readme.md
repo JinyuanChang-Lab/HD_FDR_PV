@@ -1,7 +1,7 @@
 
 ## To get the results in the paper:
 
-* This section provides results of figure 2 in Section 5, figure S3 - figure S7 in the Supplementary Material.
+* This section provides results of figure 2 in Section 4, figure S3 - figure S7 in the Supplementary Material.
 
 * Run S2.R to get the results of Method 1 and Method 2 in our paper, the Knockoff method and the Gaussian Mirror method with FDR level 0.05 and 0.1.
 
