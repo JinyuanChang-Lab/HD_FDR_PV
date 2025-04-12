@@ -8,9 +8,9 @@ We establish the theoretical validity of the debiasing process and confirm that 
 
 ## Data and Files
 
-* simulation: includes codes for Section 5 （Simulations）in the paper.
+* simulation: includes codes for Section 4 （Simulations）in the paper.
 
-* realdata: includes codes and data for Section 6（Empirical applications）in the paper.
+* realdata: includes codes and data for Section 5（Empirical applications）in the paper.
 
 ## Codes
 
