@@ -1,7 +1,7 @@
 library(ggplot2)
 
 env_sim <- new.env()
-load("./S2_plot/S2_simulation.RData", envir = env_sim)
+load("./S2_plot_nongaussian/S2_simulation_nongaussian.RData", envir = env_sim)
 
 replace_na_with_0 <- function(env) {
   for (var_name in ls(envir = env)) {
@@ -14,11 +14,7 @@ replace_na_with_0 <- function(env) {
 }
 replace_na_with_0(env_sim)
 
-get_matrices <- function(fdr_level, n, p) {
-  suffix <- switch(as.character(fdr_level),
-                   "0.05" = "_A005",
-                   "0.1" = "",
-                   "0.2" = "_A02")
+get_matrices <- function(n, p) {
   amp_seq <- seq(0.1, 0.5, by = 0.05)
   
   fdr_mat <- matrix(nrow = length(amp_seq), ncol = 5)
@@ -26,9 +22,9 @@ get_matrices <- function(fdr_level, n, p) {
   
   for (i in seq_along(amp_seq)) {
     amp <- amp_seq[i]
-    r_var <- paste0("r_n", n, "_p", p, "_amp", amp, suffix)
-    rgm_var <- paste0("rgm_n", n, "_p", p, "_amp", amp, suffix)
-    rNgm_var <- paste0("rNgm_n", n, "_p", p, "_amp", amp, suffix)
+    r_var <- paste0("r_n", n, "_p", p, "_amp", amp)
+    rgm_var <- paste0("rgm_n", n, "_p", p, "_amp", amp)
+    rNgm_var <- paste0("rNgm_n", n, "_p", p, "_amp", amp)
     
     r_val <- get(r_var, envir = env_sim)
     rgm_val <- get(rgm_var, envir = env_sim)
@@ -64,7 +60,7 @@ plot_result <- function(fdr_mat, power_mat, n, p, fdr_str) {
     ggtitle(sprintf("n = %d, d = %d", n, p)) +
     theme(legend.position = 'none', text = element_text(size = 27), plot.title = element_text(hjust = 0.5))
   
-  ggsave(sprintf("n%dp%dfdr_%s.pdf", n, p, fdr_str), p_fdr, device = "pdf", path = "./S2_plot", width = 8, height = 6)
+  ggsave(sprintf("n%dp%dfdr_%s.pdf", n, p, fdr_str), p_fdr, device = "pdf", path = "./S2_plot_nongaussian", width = 8, height = 6)
   
   # Power Plot
   power_vals <- c(power_mat[, 1], power_mat[, 2], power_mat[, 3], power_mat[, 4], power_mat[, 5])
@@ -84,21 +80,17 @@ plot_result <- function(fdr_mat, power_mat, n, p, fdr_str) {
     ggtitle(sprintf("n = %d, d = %d", n, p)) +
     theme(legend.position = 'none', text = element_text(size = 27), plot.title = element_text(hjust = 0.5))
   
-  ggsave(sprintf("n%dp%dpower_%s.pdf", n, p, fdr_str), p_power, device = "pdf", path = "./S2_plot", width = 8, height = 6)
+  ggsave(sprintf("n%dp%dpower_%s.pdf", n, p, fdr_str), p_power, device = "pdf", path = "./S2_plot_nongaussian", width = 8, height = 6)
 }
 
-# Define configurations
-n_list <- list("200" = c(200, 300, 400), "500" = c(500, 750, 1000))
-fdr_list <- list(list(level = 0.05, str = "005"), list(level = 0.1, str = "01"), list(level = 0.2, str = "02"))
+n_list <- list("200" = c(200, 300, 400))
+fdr_str <- "01"
 
-# Run all combinations
 for (n_str in names(n_list)) {
   n <- as.integer(n_str)
   p_values <- n_list[[n_str]]
   for (p in p_values) {
-    for (fdr_cfg in fdr_list) {
-      res <- get_matrices(fdr_cfg$level, n, p)
-      plot_result(res$fdr, res$power, n, p, fdr_cfg$str)
-    }
+    res <- get_matrices(n, p)
+    plot_result(res$fdr, res$power, n, p, fdr_str)
   }
 }
